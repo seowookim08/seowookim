@@ -1,0 +1,37 @@
+/* One collection, with each poster linking directly to its film. */
+.project-films .project-media { padding: 36px; background: var(--lemon); }
+.video-board { display: grid; grid-template-columns: 1.9fr 1fr; gap: 28px 36px; align-items: start; }
+.film-tile { display: block; min-width: 0; }
+.film-featured { grid-row: span 2; }
+.film-poster { position: relative; width: 100%; aspect-ratio: 720/404; overflow: hidden; background: #d5d391; }
+.film-poster img { object-fit: cover; }
+.film-play { position: absolute; left: 20px; bottom: 20px; width: 49px; height: 49px; display: grid; place-items: center; border-radius: 50%; color: var(--indigo); background: #fbfafcf2; transition: scale .2s; }
+.film-play svg { width: 24px; height: 24px; fill: currentColor; }
+.film-tile:hover .film-play { scale: 1.1; }
+.film-duration { position: absolute; right: 12px; bottom: 12px; padding: 4px 7px; font-size: 11px; color: white; background: #1e1a26e6; }
+.film-copy { display: flex; justify-content: space-between; align-items: baseline; gap: 18px; padding-top: 14px; }
+.film-copy h3 { font-size: 15px; font-weight: 500; line-height: 1.7; letter-spacing: -.025em; word-break: keep-all; }
+.film-copy > span { font-size: 11px; white-space: nowrap; color: #59552e; }
+.film-featured .film-copy h3 { font-size: clamp(20px,2vw,32px); }
+.film-tile:not(.film-featured) .film-play { width: 34px; height: 34px; left: 12px; bottom: 12px; }
+.film-tile:not(.film-featured) .film-play svg { width: 18px; height: 18px; }
+@media (max-width:1100px) {
+  .project-films .project-media { padding: 28px; }
+  .video-board { gap: 24px; grid-template-columns: 1.6fr 1fr; }
+  .film-copy { display: block; }
+  .film-copy > span { display: block; margin-top: 5px; }
+  .film-copy h3 { font-size: 13px; }
+}
+@media (max-width:820px) {
+  .video-board { grid-template-columns: 1fr 1fr; }
+  .film-featured { grid-column: 1/-1; grid-row: auto; }
+}
+@media (max-width:650px) {
+  .project-films .project-media { padding: 20px; }
+  .video-board { grid-template-columns: 1fr; gap: 26px; }
+  .film-featured { grid-column: auto; }
+  .film-copy { padding-top: 11px; }
+  .film-copy h3, .film-featured .film-copy h3 { font-size: 16px; }
+  .film-copy > span { font-size: 11px; margin-top: 6px; }
+  .film-play { width: 40px; height: 40px; left: 14px; bottom: 14px; }
+}

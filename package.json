@@ -1,0 +1,11 @@
+{
+  "name": "portfolio-direction-studies",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Personal Assembly: a large-format scrollytelling portfolio design prototype.",
+  "scripts": {
+    "dev": "node scripts/serve.mjs",
+    "check": "node --check content.js && node --check studio.js && node --check prototype.js && node --check story-content.js && node --check story-art.js && node --check memento-content.js && node --check memento-media.js && node --check channel-content.js && node --check channel-media.js && node --check rock-content.js && node --check rock-media.js && node --check calendar-gallery.js && node --check pixel-home.js && node --check story.js && node --check scripts/serve.mjs"
+  }
+}
