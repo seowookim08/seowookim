@@ -6,10 +6,12 @@ export function initPixelHome(root) {
   const threshold = [0,8,2,10,12,4,14,6,3,11,1,9,15,7,13,5];
   const tau = Math.PI * 2;
   const cycle = 6600;
+  const waveStepX = .047;
+  const waveStepY = .0735;
   const titleFrame = { canvas: titleCanvas, ctx: titleCanvas.getContext('2d'), pitch: 3, color: '#4830ae', offset: .65 };
   const paper = root.querySelector('.paper-raster');
   const paperCtx = paper.getContext('2d');
-  const clusters = [];
+  let paperImage, originX, originY;
   const glyph = document.createElement('canvas');
   const glyphCtx = glyph.getContext('2d', {willReadFrequently: true});
   let titleMask, playing = !motion.matches, visible = true, elapsed = 610, requested = 0, last = null, lastDraw = -Infinity;
@@ -52,6 +54,11 @@ export function initPixelHome(root) {
     title.setAttribute('data-rendered', '');
   }
 
+  function wave(xx, yy, sway, time) {
+    return Math.sin(xx + sway + time) + .73 * Math.cos(yy - xx * .53 + time)
+      + .51 * Math.sin(xx * 1.71 + yy * 1.54 - time * 2);
+  }
+
   function pixelField(frame, phase, mask) {
     const {ctx,w,h,rows,columns,pitch,color,offset} = frame;
     if (!w || !h) return;
@@ -61,12 +68,12 @@ export function initPixelHome(root) {
     
     const time = phase + offset;
     for (let y = 0; y < rows; y++) {
-      const yy = y * .147;
+      const yy = y * waveStepY;
       const sway = Math.sin(yy * 1.48 - time) * 1.36;
       for (let x = 0; x < columns; x++) {
         if (!mask[y * columns + x]) continue;
-        const xx = x * .141;
-        const field = Math.sin(xx + sway + time) + .73 * Math.cos(yy - xx * .53 + time) + .51 * Math.sin(xx * 1.71 + yy * 1.54 - time * 2);
+        const xx = x * waveStepX;
+        const field = wave(xx, yy, sway, time);
         const bias = threshold[(y & 3) * 4 + (x & 3)] / 16;
         const strength = (field + 1.40) * 1.30 - bias * 1.62;
         const dot = Math.max(1.5, Math.min(pitch, 2.9 + strength * .65));
@@ -79,33 +86,36 @@ export function initPixelHome(root) {
   }
 
   function layoutPaper() {
-    paper.width = root.clientWidth;
-    paper.height = root.clientHeight;
-    clusters.length = 0;
-    for (let y = 0; y < paper.height + 40; y += 56) {
-      for (let x = 0; x < paper.width + 40; x += 56) {
-        const seed = Math.sin(x * .73 + y * .31 + 1) * 43758.5453;
-        const offset = (seed - Math.floor(seed)) * tau;
-        clusters.push({ x: x + 16 * Math.cos(offset), y: y + 19 * Math.sin(offset), offset });
-      }
+    const pitch = titleFrame.pitch;
+    paper.width = Math.max(1, Math.ceil(root.clientWidth / pitch));
+    paper.height = Math.max(1, Math.ceil(root.clientHeight / pitch));
+    const area = root.getBoundingClientRect();
+    const name = titleCanvas.getBoundingClientRect();
+    originX = (name.left - area.left) / pitch;
+    originY = (name.top - area.top) / pitch;
+    paperImage = paperCtx.createImageData(paper.width, paper.height);
+    for (let i = 0; i < paperImage.data.length; i += 4) {
+      paperImage.data[i] = 72;
+      paperImage.data[i + 1] = 48;
+      paperImage.data[i + 2] = 174;
     }
   }
 
   function drawPaper(phase) {
-    paperCtx.clearRect(0, 0, paper.width, paper.height);
-    paperCtx.fillStyle = '#6849a5';
-    for (const {x, y, offset} of clusters) {
-      const gathering = .5 + .5 * Math.cos(phase + offset);
-      const spacing = 12 - 7 * gathering;
-      for (let i = 0; i < 16; i++) {
-        const strength = gathering * 1.2 - threshold[i] / 22;
-        if (strength <= 0) continue;
-        const size = 1 + 2 * strength;
-        paperCtx.globalAlpha = Math.min(.85, strength);
-        paperCtx.fillRect(Math.round(x + ((i % 4) - 1.5) * spacing),
-          Math.round(y + (Math.floor(i / 4) - 1.5) * spacing), size, size);
+    const time = phase + titleFrame.offset;
+    let alpha = 3;
+    for (let y = 0; y < paper.height; y++) {
+      const row = y - originY;
+      const yy = row * waveStepY;
+      const sway = Math.sin(yy * 1.48 - time) * 1.36;
+      for (let x = 0; x < paper.width; x++, alpha += 4) {
+        const col = x - originX;
+        const field = wave(col * waveStepX, yy, sway, time);
+        const grain = threshold[(Math.round(row) & 3) * 4 + (Math.round(col) & 3)] / 16;
+        paperImage.data[alpha] = (field + .65 - grain * 1.8) * 100;
       }
     }
+    paperCtx.putImageData(paperImage, 0, 0);
   }
 
   function draw() {
