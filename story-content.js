@@ -4,7 +4,8 @@ import { rockProject } from './rock-content.js';
 
 export const profile = {
   name: 'Seowoo Kim',
-  introduction: '앱 개발부터 영상·매거진 제작까지.\n직접 기획하고 만든 작업을 모았습니다.',
+  introduction: '문제를 발견하고, 생각을 제품과 콘텐츠로 직접 만드는 사람입니다.',
+  introductionDetail: '배움 기록 앱 ‘메멘토’를 기획·개발·출시해 운영하고, 유튜브 채널과 인스타그램 매거진을 만들었습니다.',
   about: {
     headline: '문제를 발견하고,\n생각을 제품으로 만드는 사람.',
     introduction: [

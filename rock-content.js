@@ -8,10 +8,10 @@ export const rockPosts = [
 
 export const rockProject = {
   id: 'project-c', title: 'Wonderwall', theme: 'pearl', layout: 'magazine',
-  indexLabel: '인스타그램 매거진 운영', category: 'Instagram',
+  indexLabel: '인스타그램 매거진 · 달력·티셔츠 제작', category: 'Instagram',
   description: '해외 록을 다룬 Instagram 매거진. 계정을 운영하며 게시물을 발행하고, 릴스 영상을 직접 편집했습니다. 매거진을 통해 모인 록 팬들이 교류할 수 있도록 디스코드 서버와 오픈채팅방을 운영했습니다.',
   tools: ['CapCut', 'Photoshop', 'MiriCanvas'],
-  metadata: [{ label: '기간', value: '2023.12 ~ 2025.03' }],
+  metadata: [{ label: '기간', value: '2023.12 – 2025.03' }],
   links: [{ label: '매거진', href: 'https://www.instagram.com/wonderwall_withrock/' }],
   stats: {
     items: [{ label: '운영 당시 팔로워', value: '3,000+', unit: '명' }],

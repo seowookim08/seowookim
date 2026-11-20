@@ -35,15 +35,16 @@ function links(items = [], label = '외부 링크') {
 }
 
 function header() {
-  return `<header class="site-header"><a class="wordmark" href="${home}#top">${esc(profile.name)}</a><nav aria-label="주요 탐색"><a href="${home}#work">Work</a><a class="small-work-link" href="${home}#experiments">Small work</a><a href="${home}#about">About</a><a href="#links">Links</a></nav></header>`;
+  return `<header class="site-header"><a class="wordmark" href="${home}#top">${esc(profile.name)}</a><nav aria-label="주요 탐색"><a href="${home}#work">Work</a><a class="small-work-link" href="${home}#experiments">Small work</a><a href="${home}#about">About</a><a href="#contact">Contact</a></nav></header>`;
 }
 
 function hero() {
   const words = profile.name.split(' ');
+  const intro = profile.introduction ? `<p class="pixel-intro"><strong>${esc(profile.introduction)}</strong>${profile.introductionDetail ? `<span>${esc(profile.introductionDetail)}</span>` : ''}</p>` : '';
   return `<section class="pixel-home" id="top">
     <canvas class="paper-raster" aria-hidden="true"></canvas>
     <div class="pixel-layout page-width">
-      <h1 aria-label="${esc(profile.name)}">${words.map(word => `<span>${esc(word)}</span>`).join('')}<canvas class="title-raster" aria-hidden="true"></canvas></h1>
+      <div class="pixel-identity"><h1 aria-label="${esc(profile.name)}">${words.map(word => `<span>${esc(word)}</span>`).join('')}<canvas class="title-raster" aria-hidden="true"></canvas></h1>${intro}</div>
       <div class="pixel-work"><div class="pixel-work-head"><h2>Work</h2></div>
         <nav aria-label="프로젝트 바로가기">${stories.map(project => `<a href="?project=${esc(project.id)}"><strong>${esc(project.title)}</strong><small>${esc(project.indexLabel)}</small><span aria-hidden="true">↗</span></a>`).join('')}</nav>
       </div>
@@ -65,7 +66,7 @@ function chapterText(chapter) {
 }
 
 function narrative(project) {
-  return `<div class="project-chapter-bar"><nav class="chapter-bar-inner page-width" aria-label="${esc(project.title)} 목차">${project.chapters.map((chapter, i) => `<a href="#${project.id}-${chapter.id}" data-chapter-link="${i}" ${i === 0 ? 'aria-current="step"' : ''}>${esc(chapter.label)}</a>`).join('')}</nav></div><div class="project-narrative page-width"><figure class="story-stage"><div class="story-stage-media">${project.chapters.map((chapter, i) => `<div class="stage-scene ${i === 0 ? 'is-active' : ''}" data-scene="${i}" ${i ? 'inert aria-hidden="true"' : ''}>${media(chapter.media)}</div>`).join('')}${expandButton(project, 'active')}</div><figcaption class="stage-caption">${esc(project.chapters[0].media.caption)}</figcaption></figure><div class="story-chapters">${project.chapters.map((chapter, i) => `<section class="story-chapter" id="${project.id}-${chapter.id}" data-chapter="${i}" aria-label="${esc(chapter.label)}"><figure class="inline-media"><div class="inline-media-frame">${media(chapter.media)}${expandButton(project, i)}</div><figcaption>${esc(chapter.media.caption)}</figcaption></figure>${chapterText(chapter)}</section>`).join('')}</div></div>`;
+  return `<div class="project-chapter-bar"><nav class="chapter-bar-inner page-width" aria-label="${esc(project.title)} 목차">${project.chapters.map((chapter, i) => `<a href="#${project.id}-${chapter.id}" data-chapter-link="${i}" aria-label="${esc(chapter.label)}" ${i === 0 ? 'aria-current="step"' : ''}><span class="chapter-label-full">${esc(chapter.label)}</span><span class="chapter-label-short" aria-hidden="true">${esc(chapter.shortLabel || chapter.label)}</span></a>`).join('')}</nav></div><div class="project-narrative page-width"><figure class="story-stage"><div class="story-stage-media">${project.chapters.map((chapter, i) => `<div class="stage-scene ${i === 0 ? 'is-active' : ''}" data-scene="${i}" ${i ? 'inert aria-hidden="true"' : ''}>${media(chapter.media)}</div>`).join('')}${expandButton(project, 'active')}</div><figcaption class="stage-caption">${esc(project.chapters[0].media.caption)}</figcaption></figure><div class="story-chapters">${project.chapters.map((chapter, i) => `<section class="story-chapter" id="${project.id}-${chapter.id}" data-chapter="${i}" aria-label="${esc(chapter.label)}"><figure class="inline-media"><div class="inline-media-frame">${media(chapter.media)}${expandButton(project, i)}</div><figcaption>${esc(chapter.media.caption)}</figcaption></figure>${chapterText(chapter)}</section>`).join('')}</div></div>`;
 }
 
 function projectStats(stats) {
@@ -103,7 +104,7 @@ function aboutSection() {
 }
 
 function footer() {
-  return `<footer class="site-footer" id="links"><div class="footer-inner page-width"><div class="footer-identity"><p>${esc(profile.name)}</p></div><nav class="footer-links" aria-label="Seowoo Kim 연락처">${profile.phone ? `<a href="tel:${esc(profile.phone.replace(/[^\d+]/g, ''))}">${esc(profile.phone)}</a>` : ''}${profile.email ? `<a href="mailto:${esc(profile.email)}">${esc(profile.email)}</a>` : ''}${profile.links.map(item => `<a href="${esc(item.href)}" target="_blank" rel="noopener noreferrer">${esc(item.label)}<span aria-hidden="true">↗</span></a>`).join('')}</nav><a class="back-top" href="#${single ? selected.id : 'top'}" aria-label="맨 위로">↑</a></div></footer>`;
+  return `<footer class="site-footer" id="contact"><div class="footer-inner page-width"><div class="footer-identity"><p>${esc(profile.name)}</p></div><nav class="footer-links" aria-label="Seowoo Kim 연락처">${profile.phone ? `<a href="tel:${esc(profile.phone.replace(/[^\d+]/g, ''))}">${esc(profile.phone)}</a>` : ''}${profile.email ? `<a href="mailto:${esc(profile.email)}">${esc(profile.email)}</a>` : ''}${profile.links.map(item => `<a href="${esc(item.href)}" target="_blank" rel="noopener noreferrer">${esc(item.label)}<span aria-hidden="true">↗</span></a>`).join('')}</nav><a class="back-top" href="#${single ? selected.id : 'top'}" aria-label="맨 위로">↑</a></div></footer>`;
 }
 
 const unknownNotice = requestedProject && !selected ? '<p class="not-found page-width" role="status">요청한 프로젝트를 찾을 수 없어 전체 작업을 보여드립니다.</p>' : '';
@@ -146,6 +147,18 @@ function updateScroll() {
       if (node.getBoundingClientRect().top <= line) current = i;
     });
     setChapter(article, current);
+  });
+  closeChapterBars();
+}
+
+/* The sticky chapter bar steps aside at the end of its case so the store links there stay readable. */
+const headerHeight = () => parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-height')) || 72;
+function closeChapterBars() {
+  document.querySelectorAll('.project-chapter-bar').forEach(bar => {
+    const tail = bar.closest('.project')?.querySelector('.story-chapter:last-child');
+    if (!tail) return;
+    const stuckBottom = headerHeight() + bar.offsetHeight;
+    bar.classList.toggle('is-closing', tail.getBoundingClientRect().bottom < stuckBottom + 26);
   });
 }
 const schedule = () => { if (!pendingFrame) pendingFrame = requestAnimationFrame(updateScroll); };

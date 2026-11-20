@@ -25,7 +25,7 @@ npm run check
 
 | 파일 | 내용 |
 | --- | --- |
-| `story-content.js` | 이름, 짧은 소개, About, 이메일, 외부 링크, 프로젝트 순서 |
+| `story-content.js` | 이름, 첫 화면 한 줄 소개(`introduction`·`introductionDetail`), About, 이메일, 외부 링크, 프로젝트 순서 |
 | `memento-content.js` | 메멘토 설명·세 장·화면·출시 이력·작은 프로젝트 |
 | `channel-content.js` | Problem 설명·대표 영상 |
 | `rock-content.js` | Wonderwall 설명·최고 기록·게시물·티셔츠 활동 |
@@ -54,4 +54,4 @@ npm run check
 
 초기 다섯 방향 비교와 이전 시안은 `directions.html`, `studio.*`, `prototype.*`, `content.js`, `story-art.js`에 보존되어 있습니다. 현재 페이지에서는 연결하지 않습니다.
 
-메타 설명과 Open Graph 제목은 현재 콘텐츠에 맞췄습니다. 공개 도메인 확정 전이므로 `noindex,nofollow`는 유지합니다. 배포 시 canonical 주소와 공유 이미지를 추가하고 검색 제외 설정을 해제합니다.
+메타 설명과 Open Graph 제목·공유 이미지는 현재 콘텐츠에 맞췄습니다(`assets/share-card.jpg`, 1200×630). 공개 도메인 확정 전이므로 `noindex,nofollow`는 유지하며, canonical 주소를 추가하고 검색 제외 설정을 해제하는 일은 남아 있습니다.

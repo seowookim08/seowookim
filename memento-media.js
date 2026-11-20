@@ -2,7 +2,8 @@ const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp
 
 export function mementoMedia(asset, activeSlide = 0) {
   if(asset.type === 'app-gallery') {
-    const cover = `<div class="memento-gallery" role="group" aria-label="${esc(asset.alt)}"><div class="gallery-wordmark">memento<span>오늘을, 내일의 배움으로.</span></div><div class="gallery-screens">${asset.screens.map(screen=>`<figure><img src="${esc(screen.src)}" alt="${esc(screen.alt)}" width="832" height="1800" loading="lazy" decoding="async"><figcaption>${esc(screen.label)}</figcaption></figure>`).join('')}</div></div>`;
+    const dots = asset.screens.length > 1 ? `<div class="gallery-dots" aria-hidden="true">${asset.screens.map((_, i) => `<i${i === 0 ? ' class="is-active"' : ''}></i>`).join('')}</div>` : '';
+    const cover = `<div class="memento-gallery" role="group" aria-label="${esc(asset.alt)}"><div class="gallery-wordmark">memento<span>오늘을, 내일의 배움으로.</span></div><div class="gallery-screens">${asset.screens.map(screen=>`<figure><img src="${esc(screen.src)}" alt="${esc(screen.alt)}" width="832" height="1800" loading="lazy" decoding="async"><figcaption>${esc(screen.label)}</figcaption></figure>`).join('')}</div>${dots}</div>`;
     const posters = asset.posters.map(({src, alt}) =>
       `<img class="memento-poster" src="${esc(src)}" alt="${esc(alt)}" width="3342" height="1800" loading="lazy" decoding="async">`
     );
@@ -31,6 +32,28 @@ export function initMementoCarousel(carousel) {
   let current = Number(carousel.dataset.activeSlide);
   let swipeStart = null;
 
+  // On small screens the cover turns into a horizontally scrolling row of screens.
+  // Let its own swipe move that row instead of flipping the whole carousel.
+  function scrollsItself(target) {
+    const row = target.closest?.('.gallery-screens');
+    return Boolean(row && row.scrollWidth - row.clientWidth > 4);
+  }
+
+  const screenRow = carousel.querySelector('.gallery-screens');
+  const dots = [...carousel.querySelectorAll('.gallery-dots i')];
+  if (screenRow && dots.length) {
+    const syncDots = () => {
+      const figures = [...screenRow.children];
+      if (figures.length < 2) return;
+      const step = figures[1].offsetLeft - figures[0].offsetLeft;
+      const index = step > 0 ? Math.min(dots.length - 1, Math.max(0, Math.round(screenRow.scrollLeft / step))) : 0;
+      dots.forEach((dot, i) => dot.classList.toggle('is-active', i === index));
+    };
+    screenRow.addEventListener('scroll', syncDots, { passive: true });
+    addEventListener('resize', syncDots);
+    syncDots();
+  }
+
   function turn(direction) {
     slides[current].hidden = true;
     current = (current + direction + slides.length) % slides.length;
@@ -48,7 +71,7 @@ export function initMementoCarousel(carousel) {
   });
   viewport.addEventListener('pointerdown', event => {
     if (event.pointerType === 'touch' && event.isPrimary) {
-      swipeStart = { x: event.clientX, y: event.clientY };
+      swipeStart = scrollsItself(event.target) ? null : { x: event.clientX, y: event.clientY };
     }
   });
   viewport.addEventListener('pointerup', event => {

@@ -53,6 +53,7 @@
 .gallery-screens > figure:last-child { height: 87%; transform: rotate(5deg) translateY(9px); }
 .gallery-screens img { width: auto; height: calc(100% - 30px); max-width: 100%; object-fit: contain; border: 5px solid #25232a; border-radius: 23px; background: white; box-shadow: 0 12px 25px #21184630; }
 .gallery-screens figcaption { font-size: 12px; line-height: 1.5; color: var(--art-ink); }
+.gallery-dots { display: none; }
 .app-screen-media { display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; padding: 26px; background: var(--art-paper); }
 .app-screen-media img { width: auto; max-width: 95%; height: 100%; object-fit: contain; border: 5px solid #25232a; border-radius: 24px; background: white; box-shadow: 0 12px 25px #21184630; }
 
@@ -92,13 +93,33 @@
   .sports-mini-card { right: 5px; }
 }
 @media (max-width:650px) {
-  .memento-gallery { padding: 30px 17px 23px; }
-  .gallery-wordmark { font-size: 30px; padding-bottom: 24px; }
+  .project-cover:has(.memento-gallery) { height: min(78svh, 620px); }
+  .memento-gallery { padding: 16px 0 12px; }
+  .memento-carousel-viewport { touch-action: auto; }
+  .gallery-wordmark { font-size: 30px; padding: 0 17px 18px; }
   .gallery-wordmark > span { display: none; }
-  .gallery-screens { gap: 10px; }
-  .gallery-screens img { border-width: 2px; border-radius: 10px; height: calc(100% - 26px); }
-  .gallery-screens > figure { gap: 10px; }
-  .gallery-screens figcaption { font-size: 10px; }
+  .gallery-screens {
+    display: flex;
+    align-items: stretch;
+    gap: 12px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 17px;
+    padding: 0 17px;
+    touch-action: pan-x pinch-zoom;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .gallery-screens::-webkit-scrollbar { display: none; }
+  .gallery-screens > figure,
+  .gallery-screens > figure:first-child,
+  .gallery-screens > figure:last-child { flex: 0 0 84%; height: 100%; gap: 10px; transform: none; scroll-snap-align: center; }
+  .gallery-screens img { height: calc(100% - 28px); width: auto; border-width: 3px; border-radius: 16px; }
+  .gallery-screens figcaption { font-size: 11px; }
+  .gallery-dots { display: flex; justify-content: center; align-items: center; gap: 6px; padding-top: 10px; }
+  .gallery-dots i { width: 6px; height: 6px; border-radius: 50%; background: #f4f0ff55; transition: background-color .18s ease, width .18s ease; }
+  .gallery-dots i.is-active { width: 16px; border-radius: 3px; background: var(--art-ink); }
   .app-screen-media { padding: 22px; }
   .app-screen-media img { border-width: 4px; border-radius: 21px; }
   .memento-diagram { padding: 30px 20px; }
