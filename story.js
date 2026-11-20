@@ -40,7 +40,7 @@ function header() {
 
 function hero() {
   const words = profile.name.split(' ');
-  const intro = profile.introduction ? `<p class="pixel-intro"><strong>${esc(profile.introduction)}</strong>${profile.introductionDetail ? `<span>${esc(profile.introductionDetail)}</span>` : ''}</p>` : '';
+  const intro = profile.introduction ? `<div class="pixel-intro"><strong>${esc(profile.introduction)}</strong>${profile.introductionDetail ? `<span>${esc(profile.introductionDetail)}</span>` : ''}${profile.availability ? `<p class="pixel-availability">${esc(profile.availability)}</p>` : ''}</div>` : '';
   return `<section class="pixel-home" id="top">
     <canvas class="paper-raster" aria-hidden="true"></canvas>
     <div class="pixel-layout page-width">
@@ -77,8 +77,12 @@ function extensionSection(extension) {
   return `<section class="project-extension page-width">${extension.calendars ? calendarGallery(extension.calendars) : ''}${extension.post ? `<a class="extension-post" href="${esc(extension.post.url)}" target="_blank" rel="noopener noreferrer" aria-label="${esc(extension.title)} Instagram에서 보기"><img src="${esc(extension.post.src)}" alt="${esc(extension.post.alt)}" width="${extension.post.width}" height="${extension.post.height}" loading="lazy" decoding="async"><span>${esc(extension.post.label || '홍보 게시물 보기')} ↗</span></a>` : ''}<div class="extension-copy"><h3>${esc(extension.title)}</h3><p>${esc(extension.text)}</p></div></section>`;
 }
 
+function projectNotes(notes) {
+  return `<section class="project-notes page-width"><h3>${lines(notes.title)}</h3><div>${notes.paragraphs.map(p => `<p>${esc(p)}</p>`).join('')}</div></section>`;
+}
+
 function project(project) {
-  return `<article class="project project-${project.layout} theme-${project.theme}" id="${project.id}" aria-labelledby="${project.id}-title">${projectHeading(project)}${project.stats ? projectStats(project.stats) : ''}<div class="project-media page-width ${project.layout === 'story' ? 'project-cover' : ''}">${media(project.cover)}${project.layout === 'story' ? expandButton(project, 'cover') : ''}</div>${project.chapters?.length ? narrative(project) : ''}${(project.extensions || (project.extension ? [project.extension] : [])).map(extensionSection).join('')}</article>`;
+  return `<article class="project project-${project.layout} theme-${project.theme}" id="${project.id}" aria-labelledby="${project.id}-title">${projectHeading(project)}${project.stats ? projectStats(project.stats) : ''}<div class="project-media page-width ${project.layout === 'story' ? 'project-cover' : ''}">${media(project.cover)}${project.layout === 'story' ? expandButton(project, 'cover') : ''}</div>${project.notes ? projectNotes(project.notes) : ''}${project.chapters?.length ? narrative(project) : ''}${(project.extensions || (project.extension ? [project.extension] : [])).map(extensionSection).join('')}</article>`;
 }
 
 function smallWork() {

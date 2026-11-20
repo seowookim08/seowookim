@@ -1,6 +1,6 @@
 # Seowoo Kim — Portfolio
 
-05 Personal Assembly의 색감과 타이포그래피를 유지하며, 실제 작업 중심으로 편집한 포트폴리오입니다. Node.js 기본 모듈과 HTML/CSS/ES modules만 사용합니다. 의존성 설치는 필요 없습니다.
+05 Personal Assembly의 색감과 타이포그래피를 유지하며, 실제 작업 중심으로 편집한 포트폴리오입니다. Node.js 기본 모듈과 HTML/CSS/ES modules만 사용합니다. 의존성 설치는 필요 없습니다. https://seowookim08.github.io/ 로 배포되어 있습니다.
 
 ```sh
 npm run dev
@@ -48,10 +48,8 @@ npm run check
 }
 ```
 
-`type: 'video'`는 `src`, `poster`, `alt`를 사용합니다. 사용자 컨트롤을 제공하며 자동 재생하지 않습니다. `profile.about`은 홈의 About 섹션에, `profile.email`은 값이 있는 경우 푸터에 표시됩니다.
+`type: 'video'`는 `src`, `poster`, `alt`를 사용합니다. 사용자 컨트롤을 제공하며 자동 재생하지 않습니다. `profile.about`은 홈의 About 섹션에, `profile.email`은 값이 있는 경우 푸터에 표시됩니다. `profile.availability`는 첫 화면 소개 아래에 합류 가능 시점으로 표시됩니다.
 
-실제 화면과 썸네일은 `assets/`에 로컬로 저장되어 있습니다. 소스 기록은 `docs/*-content-sources.md`, 이번 편집 방향은 `docs/2026-11-15-edit-design.md`, 검증 기록은 `docs/2026-11-15-redesign-verification.md`에 있습니다. `previews/redesign-*.png`는 새 화면의 브라우저 캡처입니다.
+실제 화면과 썸네일은 `assets/`에 로컬로 저장되어 있습니다.
 
-초기 다섯 방향 비교와 이전 시안은 `directions.html`, `studio.*`, `prototype.*`, `content.js`, `story-art.js`에 보존되어 있습니다. 현재 페이지에서는 연결하지 않습니다.
-
-메타 설명과 Open Graph 제목·공유 이미지는 현재 콘텐츠에 맞췄습니다(`assets/share-card.jpg`, 1200×630). 공개 도메인 확정 전이므로 `noindex,nofollow`는 유지하며, canonical 주소를 추가하고 검색 제외 설정을 해제하는 일은 남아 있습니다.
+메타 설명과 Open Graph 제목·공유 이미지는 현재 콘텐츠에 맞췄습니다(`assets/share-card.jpg`, 1200×630). `index.html`에는 canonical 주소가 있고, `robots.txt`와 `sitemap.xml`로 검색 노출을 열어 두었습니다. 이전 디자인 시안과 내부 문서는 저장소에서 정리했고 이전 커밋 이력에만 남아 있습니다.

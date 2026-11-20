@@ -9,12 +9,16 @@ export const rockPosts = [
 export const rockProject = {
   id: 'project-c', title: 'Wonderwall', theme: 'pearl', layout: 'magazine',
   indexLabel: '인스타그램 매거진 · 달력·티셔츠 제작', category: 'Instagram',
-  description: '해외 록을 다룬 Instagram 매거진. 계정을 운영하며 게시물을 발행하고, 릴스 영상을 직접 편집했습니다. 매거진을 통해 모인 록 팬들이 교류할 수 있도록 디스코드 서버와 오픈채팅방을 운영했습니다.',
+  description: '해외 록을 다룬 Instagram 매거진. 계정을 운영하며 게시물을 발행하고, 릴스는 커버와 영상 편집을 직접 했습니다. 직접 편집한 릴스 한 편은 조회수 193만 회를 기록했고, 매거진을 통해 모인 록 팬들이 교류할 수 있도록 디스코드 서버와 오픈채팅방을 운영했습니다.',
   tools: ['CapCut', 'Photoshop', 'MiriCanvas'],
   metadata: [{ label: '기간', value: '2023.12 – 2025.03' }],
   links: [{ label: '매거진', href: 'https://www.instagram.com/wonderwall_withrock/' }],
   stats: {
-    items: [{ label: '운영 당시 팔로워', value: '3,000+', unit: '명' }],
+    items: [
+      { label: '팔로워', value: '3,000+', unit: '명' },
+      { label: '릴스 최고 조회수', value: '193만', unit: '회' },
+    ],
+    note: '팔로워와 릴스 조회수 모두 2025.03 기준입니다.',
   },
   cover: { type: 'rock-gallery', posts: rockPosts, alt: '원더월의 매거진 게시물과 직접 편집한 릴스 예시' },
   extensions: [{
