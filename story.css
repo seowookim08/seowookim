@@ -88,6 +88,7 @@ img, video { width: 100%; height: 100%; object-fit: contain; }
 /* The intent behind a piece of work, stated once below its evidence. */
 .project-notes { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1.25fr); gap: 9%; margin-top: 62px; }
 .project-notes h3 { font-size: clamp(24px,2.1vw,36px); font-weight: 500; line-height: 1.5; letter-spacing: -.055em; color: var(--indigo); word-break: keep-all; overflow-wrap: anywhere; }
+.project-notes > div { max-width: 640px; }
 .project-notes > div > p { font-size: 16px; line-height: 2; color: var(--muted); }
 .project-notes > div > p + p { margin-top: 20px; }
 
