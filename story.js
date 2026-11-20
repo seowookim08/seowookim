@@ -41,7 +41,7 @@ function header() {
 function hero() {
   const words = profile.name.split(' ');
   const intro = profile.introduction ? `<div class="pixel-intro"><strong>${esc(profile.introduction)}</strong>${profile.introductionDetail ? `<span>${esc(profile.introductionDetail)}</span>` : ''}${profile.availability ? `<p class="pixel-availability">${esc(profile.availability)}</p>` : ''}</div>` : '';
-  return `<section class="pixel-home" id="top">
+  return `<section class="pixel-home hero-intro" id="top">
     <canvas class="paper-raster" aria-hidden="true"></canvas>
     <div class="pixel-layout page-width">
       <div class="pixel-identity"><h1 aria-label="${esc(profile.name)}">${words.map(word => `<span>${esc(word)}</span>`).join('')}<canvas class="title-raster" aria-hidden="true"></canvas></h1>${intro}</div>

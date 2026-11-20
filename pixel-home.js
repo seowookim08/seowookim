@@ -8,13 +8,21 @@ export function initPixelHome(root) {
   const cycle = 6600;
   const waveStepX = .047;
   const waveStepY = .0735;
+  const introMs = 1250;
   const titleFrame = { canvas: titleCanvas, ctx: titleCanvas.getContext('2d'), pitch: 3, color: '#4830ae', offset: .65 };
   const paper = root.querySelector('.paper-raster');
   const paperCtx = paper.getContext('2d');
   let paperImage, originX, originY;
   const glyph = document.createElement('canvas');
   const glyphCtx = glyph.getContext('2d', {willReadFrequently: true});
-  let titleMask, playing = !motion.matches, visible = true, elapsed = 610, requested = 0, last = null, lastDraw = -Infinity;
+  let titleMask, playing = !motion.matches, visible = true, elapsed = 610, introAt = 0, requested = 0, last = null, lastDraw = -Infinity, introFrames = 0;
+
+  /* A cheap per-cell hash so each pixel can settle on its own beat. */
+  function grain(x, y) {
+    let h = Math.imul(x, 374761393) + Math.imul(y, 668265263) | 0;
+    h = Math.imul(h ^ (h >>> 13), 1274126177);
+    return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
+  }
 
   function resize(frame) {
     frame.w = Math.ceil(frame.canvas.clientWidth);
@@ -59,27 +67,49 @@ export function initPixelHome(root) {
       + .51 * Math.sin(xx * 1.71 + yy * 1.54 - time * 2);
   }
 
-  function pixelField(frame, phase, mask) {
+  function pixelField(frame, phase, mask, p) {
     const {ctx,w,h,rows,columns,pitch,color,offset} = frame;
-    if (!w || !h) return;
+    if (!w || !h || !mask) return;
     ctx.clearRect(0, 0, w, h);
     
     ctx.fillStyle = color;
     
     const time = phase + offset;
+    const assembling = p < 1;
+    const bloom = assembling ? Math.sin(Math.min(1, Math.max(0, (p - .84) / .16)) * Math.PI) : 0;
+    let alphaStep = -1;
+    ctx.globalAlpha = 1;
     for (let y = 0; y < rows; y++) {
       const yy = y * waveStepY;
       const sway = Math.sin(yy * 1.48 - time) * 1.36;
+      const sweepY = (y / rows) * .42;
       for (let x = 0; x < columns; x++) {
         if (!mask[y * columns + x]) continue;
         const xx = x * waveStepX;
         const field = wave(xx, yy, sway, time);
         const bias = threshold[(y & 3) * 4 + (x & 3)] / 16;
         const strength = (field + 1.40) * 1.30 - bias * 1.62;
-        const dot = Math.max(1.5, Math.min(pitch, 2.9 + strength * .65));
+        let dot = Math.max(1.5, Math.min(pitch, 2.9 + strength * .65));
+        let dx = 0, dy = 0, alpha = 1;
+        /* Intro: each pixel drifts up from a scattered spot and settles in a diagonal sweep, so the name writes itself in. */
+        if (assembling) {
+          const seed = grain(x, y);
+          const order = Math.min(1, ((x / columns) * .58 + sweepY) * .84 + seed * .16);
+          const local = Math.min(1, Math.max(0, (p - order * .45) / .55));
+          const remain = 1 - local;
+          const settle = local * local * (3 - 2 * local);
+          if (seed > .48 + .52 * settle) continue;
+          dx = (grain(x + 11, y + 5) - .5) * 15 * remain;
+          dy = remain * (6 + seed * 14);
+          dot = Math.max(1.2, dot * (.58 + .42 * settle));
+          alpha = .34 + .66 * settle;
+        }
+        if (bloom) dot += (pitch - dot) * bloom;
         const inset = (pitch - dot) / 2;
         const drift = Math.max(0, Math.sin(xx * .42 + yy * .3 - time) - .52) * 7;
-        ctx.fillRect(x * pitch + inset, y * pitch + inset - drift, dot, dot);
+        const step = Math.round(alpha * 16);
+        if (step !== alphaStep) { alphaStep = step; ctx.globalAlpha = step / 16; }
+        ctx.fillRect(x * pitch + inset + dx, y * pitch + inset - drift + dy, dot, dot);
       }
     }
     ctx.globalAlpha = 1;
@@ -111,17 +141,19 @@ export function initPixelHome(root) {
       for (let x = 0; x < paper.width; x++, alpha += 4) {
         const col = x - originX;
         const field = wave(col * waveStepX, yy, sway, time);
-        const grain = threshold[(Math.round(row) & 3) * 4 + (Math.round(col) & 3)] / 16;
-        paperImage.data[alpha] = (field + .65 - grain * 1.8) * 100;
+        const grainValue = threshold[(Math.round(row) & 3) * 4 + (Math.round(col) & 3)] / 16;
+        paperImage.data[alpha] = (field + .65 - grainValue * 1.8) * 100;
       }
     }
     paperCtx.putImageData(paperImage, 0, 0);
   }
 
-  function draw() {
+  const introDone = () => !playing || introAt >= introMs;
+
+  function draw(skipPaper) {
     const phase = elapsed / cycle * tau;
-    drawPaper(phase);
-    pixelField(titleFrame, phase, titleMask);
+    if (!skipPaper) drawPaper(phase);
+    pixelField(titleFrame, phase, titleMask, introDone() ? 1 : introAt / introMs);
   }
   function redraw() {
     layoutPaper();
@@ -132,10 +164,16 @@ export function initPixelHome(root) {
   function step(now) {
     requested = 0;
     if (!playing || !visible || document.hidden) return;
-    if (last !== null) elapsed = (elapsed + Math.min(100, now - last)) % cycle;
+    if (last !== null) {
+      const delta = Math.min(100, now - last);
+      elapsed = (elapsed + delta) % cycle;
+      if (introAt < introMs) introAt = Math.min(introMs, introAt + delta);
+    }
     last = now;
-    if (now - lastDraw >= 1000 / 30) {
-      draw();
+    const interval = introDone() ? 1000 / 30 : 1000 / 60;
+    if (now - lastDraw >= interval) {
+      /* While the title assembles every frame counts; the paper field can keep its 30fps cadence. */
+      draw(introDone() ? false : (introFrames++ & 1) === 1);
       lastDraw = now;
     }
     requested = requestAnimationFrame(step);
