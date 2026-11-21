@@ -40,7 +40,7 @@ function header() {
 
 function hero() {
   const words = profile.name.split(' ');
-  const intro = profile.introduction ? `<div class="pixel-intro"><strong>${esc(profile.introduction)}</strong>${profile.introductionDetail ? `<span>${esc(profile.introductionDetail)}</span>` : ''}${profile.availability ? `<p class="pixel-availability">${esc(profile.availability)}</p>` : ''}</div>` : '';
+  const intro = profile.introduction ? `<div class="pixel-intro"><strong>${esc(profile.introduction)}</strong>${profile.introductionDetail ? `<span>${esc(profile.introductionDetail)}</span>` : ''}</div>` : '';
   return `<section class="pixel-home hero-intro" id="top">
     <canvas class="paper-raster" aria-hidden="true"></canvas>
     <div class="pixel-layout page-width">
@@ -56,17 +56,12 @@ function projectHeading(project) {
   return `<header class="project-heading page-width"><div class="project-title"><p class="project-category">${esc(project.category)}</p><${heading} id="${project.id}-title">${single ? esc(project.title) : `<a href="?project=${esc(project.id)}" aria-label="${esc(project.title)} 독립 페이지 열기">${esc(project.title)}</a>`}</${heading}>${project.metadata?.length ? `<dl class="project-meta">${project.metadata.map(item => `<div><dt>${esc(item.label)}</dt><dd>${esc(item.value)}</dd></div>`).join('')}</dl>` : ''}</div><div class="project-introduction"><p>${esc(project.description)}</p>${project.tools?.length ? `<dl class="project-tools"><dt>활용 툴</dt><dd>${project.tools.map(esc).join(' · ')}</dd></dl>` : ''}${links(project.links, `${project.title} 외부 링크`)}</div></header>`;
 }
 
-const expandIcon = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 8V3h5M12 3h5v5M17 12v5h-5M8 17H3v-5"/></svg>';
-function expandButton(project, step) {
-  return `<button class="media-expand" type="button" data-expand="${esc(project.id)}" data-step="${step}" aria-label="${esc(project.title)} 시각 자료 크게 보기">${expandIcon}<span>크게 보기</span></button>`;
-}
-
 function chapterText(chapter) {
   return `<div class="chapter-copy"><h3>${lines(chapter.title)}</h3>${chapter.paragraphs.map(p => `<p>${esc(p)}</p>`).join('')}${chapter.milestones?.length ? `<dl class="milestones">${chapter.milestones.map(item => `<div><dt>${esc(item.date)}</dt><dd>${esc(item.text)}</dd></div>`).join('')}</dl>` : ''}${links(chapter.links, `${chapter.label} 관련 링크`)}</div>`;
 }
 
 function narrative(project) {
-  return `<div class="project-chapter-bar"><nav class="chapter-bar-inner page-width" aria-label="${esc(project.title)} 목차">${project.chapters.map((chapter, i) => `<a href="#${project.id}-${chapter.id}" data-chapter-link="${i}" aria-label="${esc(chapter.label)}" ${i === 0 ? 'aria-current="step"' : ''}><span class="chapter-label-full">${esc(chapter.label)}</span><span class="chapter-label-short" aria-hidden="true">${esc(chapter.shortLabel || chapter.label)}</span></a>`).join('')}</nav></div><div class="project-narrative page-width"><figure class="story-stage"><div class="story-stage-media">${project.chapters.map((chapter, i) => `<div class="stage-scene ${i === 0 ? 'is-active' : ''}" data-scene="${i}" ${i ? 'inert aria-hidden="true"' : ''}>${media(chapter.media)}</div>`).join('')}${expandButton(project, 'active')}</div><figcaption class="stage-caption">${esc(project.chapters[0].media.caption)}</figcaption></figure><div class="story-chapters">${project.chapters.map((chapter, i) => `<section class="story-chapter" id="${project.id}-${chapter.id}" data-chapter="${i}" aria-label="${esc(chapter.label)}"><figure class="inline-media"><div class="inline-media-frame">${media(chapter.media)}${expandButton(project, i)}</div><figcaption>${esc(chapter.media.caption)}</figcaption></figure>${chapterText(chapter)}</section>`).join('')}</div></div>`;
+  return `<div class="project-chapter-bar"><nav class="chapter-bar-inner page-width" aria-label="${esc(project.title)} 목차">${project.chapters.map((chapter, i) => `<a href="#${project.id}-${chapter.id}" data-chapter-link="${i}" aria-label="${esc(chapter.label)}" ${i === 0 ? 'aria-current="step"' : ''}><span class="chapter-label-full">${esc(chapter.label)}</span><span class="chapter-label-short" aria-hidden="true">${esc(chapter.shortLabel || chapter.label)}</span></a>`).join('')}</nav></div><div class="project-narrative page-width"><figure class="story-stage"><div class="story-stage-media">${project.chapters.map((chapter, i) => `<div class="stage-scene ${i === 0 ? 'is-active' : ''}" data-scene="${i}" ${i ? 'inert aria-hidden="true"' : ''}>${media(chapter.media)}</div>`).join('')}</div><figcaption class="stage-caption">${esc(project.chapters[0].media.caption)}</figcaption></figure><div class="story-chapters">${project.chapters.map((chapter, i) => `<section class="story-chapter" id="${project.id}-${chapter.id}" data-chapter="${i}" aria-label="${esc(chapter.label)}"><figure class="inline-media"><div class="inline-media-frame">${media(chapter.media)}</div><figcaption>${esc(chapter.media.caption)}</figcaption></figure>${chapterText(chapter)}</section>`).join('')}</div></div>`;
 }
 
 function projectStats(stats) {
@@ -82,7 +77,7 @@ function projectNotes(notes) {
 }
 
 function project(project) {
-  return `<article class="project project-${project.layout} theme-${project.theme}" id="${project.id}" aria-labelledby="${project.id}-title">${projectHeading(project)}${project.stats ? projectStats(project.stats) : ''}<div class="project-media page-width ${project.layout === 'story' ? 'project-cover' : ''}">${media(project.cover)}${project.layout === 'story' ? expandButton(project, 'cover') : ''}</div>${project.notes ? projectNotes(project.notes) : ''}${project.chapters?.length ? narrative(project) : ''}${(project.extensions || (project.extension ? [project.extension] : [])).map(extensionSection).join('')}</article>`;
+  return `<article class="project project-${project.layout} theme-${project.theme}" id="${project.id}" aria-labelledby="${project.id}-title">${projectHeading(project)}${project.stats ? projectStats(project.stats) : ''}<div class="project-media page-width ${project.layout === 'story' ? 'project-cover' : ''}">${media(project.cover)}</div>${project.notes ? projectNotes(project.notes) : ''}${project.chapters?.length ? narrative(project) : ''}${(project.extensions || (project.extension ? [project.extension] : [])).map(extensionSection).join('')}</article>`;
 }
 
 function smallWork() {
@@ -172,33 +167,6 @@ addEventListener('hashchange', schedule);
 addEventListener('load', schedule);
 reducedMotion.addEventListener('change', schedule);
 updateScroll();
-
-const dialog = document.querySelector('#media-dialog');
-let modalTrigger;
-document.addEventListener('click', event => {
-  const button = event.target.closest('[data-expand]');
-  if (!button) return;
-  const data = stories.find(item => item.id === button.dataset.expand);
-  const step = button.dataset.step;
-  const chapter = step === 'cover' ? null : data.chapters[step === 'active' ? activeSteps.get(data.id) : Number(step)];
-  const asset = chapter ? chapter.media : data.cover;
-  const activeSlide = Number(button.parentElement.querySelector('.memento-carousel')?.dataset.activeSlide ?? 0);
-  modalTrigger = button;
-  dialog.className = `media-dialog theme-${data.theme}`;
-  dialog.innerHTML = `<div class="media-dialog-head"><h2 id="media-dialog-title">${esc(data.title)}${chapter ? ` / ${esc(chapter.label)}` : ''}</h2><button class="dialog-close" type="button" aria-label="확대 화면 닫기">닫기 <span aria-hidden="true">×</span></button></div><div class="expanded-media">${media(asset, activeSlide)}</div>${asset.caption ? `<p class="expanded-caption">${esc(asset.caption)}</p>` : ''}`;
-  dialog.querySelectorAll('.memento-carousel').forEach(initMementoCarousel);
-  dialog.querySelector('.dialog-close').addEventListener('click', () => dialog.close());
-  dialog.showModal();
-});
-dialog.addEventListener('click', event => {
-  if (event.target !== dialog) return;
-  const bounds = dialog.getBoundingClientRect();
-  if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) dialog.close();
-});
-dialog.addEventListener('close', () => {
-  dialog.querySelector('video')?.pause();
-  modalTrigger?.focus({ preventScroll: true });
-});
 
 document.querySelectorAll('.memento-carousel').forEach(initMementoCarousel);
 initCalendars();

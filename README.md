@@ -51,7 +51,7 @@ npm run check
 }
 ```
 
-`type: 'video'`는 `src`, `poster`, `alt`를 사용합니다. 사용자 컨트롤을 제공하며 자동 재생하지 않습니다. `profile.about`은 홈의 About 섹션에, `profile.email`은 값이 있는 경우 푸터에 표시됩니다. `profile.availability`는 첫 화면 소개 아래에 합류 가능 시점으로 표시됩니다.
+`type: 'video'`는 `src`, `poster`, `alt`를 사용합니다. 사용자 컨트롤을 제공하며 자동 재생하지 않습니다. `profile.about`은 홈의 About 섹션에, `profile.email`은 값이 있는 경우 푸터에 표시됩니다.
 
 실제 화면과 썸네일은 `assets/`에 로컬로 저장되어 있습니다.
 
