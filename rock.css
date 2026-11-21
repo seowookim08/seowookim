@@ -50,3 +50,10 @@
 .calendar-status { font-size: 14px; color: var(--plum); }
 .calendar-status > span { margin-left: 15px; font-size: 11px; color: var(--muted); }
 @media(max-width:650px) { .calendar-gallery { margin-bottom: 0; } }
+
+@media (max-width: 650px) {
+  .calendar-controls { justify-content: center; gap: 8px; padding-top: 4px; }
+  .calendar-controls button { position: relative; border: 0; font-size: 17px; }
+  .calendar-controls button::before { content: ""; position: absolute; inset: 7px; border: 1px solid var(--line); border-radius: 50%; }
+  .calendar-status { text-align: center; }
+}

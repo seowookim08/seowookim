@@ -4,6 +4,7 @@
 .memento-carousel-viewport:focus-visible { outline-offset: -3px; }
 .memento-slide { height: 100%; }
 .memento-poster { display: block; width: 100%; height: 100%; object-fit: contain; background: #000; }
+.memento-poster-light { background: #fafafa; }
 .memento-carousel-controls { display: flex; align-items: center; gap: 4px; padding: 8px 12px; }
 .memento-carousel-controls button {
   position: relative;
@@ -93,9 +94,12 @@
   .sports-mini-card { right: 5px; }
 }
 @media (max-width:650px) {
-  .project-cover:has(.memento-gallery) { height: min(78svh, 620px); }
+  .project-cover:has(.memento-carousel) { height: min(78svh, 620px); }
   .memento-gallery { padding: 16px 0 12px; }
-  .memento-carousel-viewport { touch-action: auto; }
+
+  .memento-carousel-controls { justify-content: center; gap: 0; padding: 0 8px; }
+  .memento-carousel-controls button { font-size: 15px; }
+  .memento-carousel-controls button::before { inset: 8px; }
   .gallery-wordmark { font-size: 30px; padding: 0 17px 18px; }
   .gallery-wordmark > span { display: none; }
   .gallery-screens {
@@ -131,3 +135,7 @@
   .sports-ticket { left: 4px; top: 9px; transform: rotate(-9deg) scale(.72); transform-origin: 0 0; }
   .sports-mini-card { right: 3px; bottom: 7px; transform: rotate(10deg) scale(.7); transform-origin: 100% 100%; }
 }
+
+.memento-screen { height: 100%; margin: 0; display: grid; grid-template-rows: minmax(0, 1fr) auto; justify-items: center; gap: 10px; padding: 16px; }
+.memento-screen img { width: 100%; height: 100%; object-fit: contain; }
+.memento-screen figcaption { font-size: 13px; }

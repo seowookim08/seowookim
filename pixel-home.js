@@ -68,28 +68,30 @@ export function initPixelHome(root) {
   }
 
   function pixelField(frame, phase, mask, p) {
-    const {ctx,w,h,rows,columns,pitch,color,offset} = frame;
+    const {ctx,w,h,rows,columns,pitch,color} = frame;
     if (!w || !h || !mask) return;
     ctx.clearRect(0, 0, w, h);
     
+    // One broad reflection crosses both lines of the name together.
     ctx.fillStyle = color;
-    
-    const time = phase + offset;
+    if (playing) {
+      const radius = w * .24;
+      const center = -radius - h * .18 + (phase / tau) * (w + h * .18 + 2 * radius);
+      const sheen = ctx.createLinearGradient(center - radius, 0, center + radius, radius * .36);
+      sheen.addColorStop(0, color);
+      sheen.addColorStop(.5, '#6952bb');
+      sheen.addColorStop(1, color);
+      ctx.fillStyle = sheen;
+    }
     const assembling = p < 1;
     const bloom = assembling ? Math.sin(Math.min(1, Math.max(0, (p - .84) / .16)) * Math.PI) : 0;
     let alphaStep = -1;
     ctx.globalAlpha = 1;
     for (let y = 0; y < rows; y++) {
-      const yy = y * waveStepY;
-      const sway = Math.sin(yy * 1.48 - time) * 1.36;
       const sweepY = (y / rows) * .42;
       for (let x = 0; x < columns; x++) {
         if (!mask[y * columns + x]) continue;
-        const xx = x * waveStepX;
-        const field = wave(xx, yy, sway, time);
-        const bias = threshold[(y & 3) * 4 + (x & 3)] / 16;
-        const strength = (field + 1.40) * 1.30 - bias * 1.62;
-        let dot = Math.max(1.5, Math.min(pitch, 2.9 + strength * .65));
+        let dot = pitch;
         let dx = 0, dy = 0, alpha = 1;
         /* Intro: each pixel drifts up from a scattered spot and settles in a diagonal sweep, so the name writes itself in. */
         if (assembling) {
@@ -106,10 +108,9 @@ export function initPixelHome(root) {
         }
         if (bloom) dot += (pitch - dot) * bloom;
         const inset = (pitch - dot) / 2;
-        const drift = Math.max(0, Math.sin(xx * .42 + yy * .3 - time) - .52) * 7;
         const step = Math.round(alpha * 16);
         if (step !== alphaStep) { alphaStep = step; ctx.globalAlpha = step / 16; }
-        ctx.fillRect(x * pitch + inset + dx, y * pitch + inset - drift + dy, dot, dot);
+        ctx.fillRect(x * pitch + inset + dx, y * pitch + inset + dy, dot, dot);
       }
     }
     ctx.globalAlpha = 1;
@@ -192,6 +193,6 @@ export function initPixelHome(root) {
   const observer = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; sync(); });
   observer.observe(root);
   document.addEventListener('visibilitychange', sync);
-  motion.addEventListener('change', event => { playing = !event.matches; sync(); });
+  motion.addEventListener('change', event => { playing = !event.matches; draw(); sync(); });
   sync();
 }

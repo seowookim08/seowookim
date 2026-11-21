@@ -12,10 +12,9 @@ const aboutPage = params.get('page') === 'about';
 const requestedProject = params.get('project');
 const selected = stories.find(project => project.id === requestedProject);
 const single = Boolean(selected);
-const displayedStories = single ? [selected] : stories;
 const home = single || aboutPage ? './' : '';
 document.body.classList.toggle('single-project', single);
-document.title = aboutPage ? `About — ${profile.name}` : single ? `${selected.title} — ${profile.name}` : `${profile.name} — Portfolio`;
+document.title = aboutPage ? `About - ${profile.name}` : single ? `${selected.title} - ${profile.name}` : `${profile.name} - Portfolio`;
 
 function media(asset, activeSlide) {
   const special = mementoMedia(asset, activeSlide) || channelMedia(asset) || rockMedia(asset);
@@ -35,7 +34,7 @@ function links(items = [], label = '외부 링크') {
 }
 
 function header() {
-  return `<header class="site-header"><a class="wordmark" href="${home}#top">${esc(profile.name)}</a><nav aria-label="주요 탐색"><a href="${home}#work">Work</a><a class="small-work-link" href="${home}#experiments">Small work</a><a href="${home}#about">About</a><a href="#contact">Contact</a></nav></header>`;
+  return `<header class="site-header"><a class="wordmark" href="${home}#top">${esc(profile.name)}</a><nav aria-label="주요 탐색"><a href="${home}#work">Work</a><a href="${home}#about">About</a><a href="#contact">Contact</a></nav></header>`;
 }
 
 function hero() {
@@ -46,14 +45,14 @@ function hero() {
     <div class="pixel-layout page-width">
       <div class="pixel-identity"><h1 aria-label="${esc(profile.name)}">${words.map(word => `<span>${esc(word)}</span>`).join('')}<canvas class="title-raster" aria-hidden="true"></canvas></h1>${intro}</div>
       <div class="pixel-work"><div class="pixel-work-head"><h2>Work</h2></div>
-        <nav aria-label="프로젝트 바로가기">${stories.map(project => `<a href="?project=${esc(project.id)}"><strong>${esc(project.title)}</strong><small>${esc(project.indexLabel)}</small><span aria-hidden="true">↗</span></a>`).join('')}</nav>
+        <nav aria-label="프로젝트 바로가기">${stories.map(project => `<a href="#${esc(project.id)}"><strong>${esc(project.title)}</strong><small>${esc(project.indexLabel)}</small><span aria-hidden="true">↓</span></a>`).join('')}</nav>
       </div>
     </div></section>`;
 }
 
 function projectHeading(project) {
   const heading = single ? 'h1' : 'h2';
-  return `<header class="project-heading page-width"><div class="project-title"><p class="project-category">${esc(project.category)}</p><${heading} id="${project.id}-title">${single ? esc(project.title) : `<a href="?project=${esc(project.id)}" aria-label="${esc(project.title)} 독립 페이지 열기">${esc(project.title)}</a>`}</${heading}>${project.metadata?.length ? `<dl class="project-meta">${project.metadata.map(item => `<div><dt>${esc(item.label)}</dt><dd>${esc(item.value)}</dd></div>`).join('')}</dl>` : ''}</div><div class="project-introduction"><p>${esc(project.description)}</p>${project.tools?.length ? `<dl class="project-tools"><dt>활용 툴</dt><dd>${project.tools.map(esc).join(' · ')}</dd></dl>` : ''}${links(project.links, `${project.title} 외부 링크`)}</div></header>`;
+  return `<header class="project-heading page-width"><div class="project-title"><p class="project-category">${esc(project.category)}</p><${heading} id="${project.id}-title">${esc(project.title)}</${heading}>${project.metadata?.length ? `<dl class="project-meta">${project.metadata.map(item => `<div><dt>${esc(item.label)}</dt><dd>${esc(item.value)}</dd></div>`).join('')}</dl>` : ''}</div><div class="project-introduction"><p>${esc(project.description)}</p>${project.tools?.length ? `<dl class="project-tools"><dt>활용 툴</dt><dd>${project.tools.map(esc).join(' · ')}</dd></dl>` : ''}${links(project.links, `${project.title} 외부 링크`)}</div></header>`;
 }
 
 function chapterText(chapter) {
@@ -69,7 +68,7 @@ function projectStats(stats) {
 }
 
 function extensionSection(extension) {
-  return `<section class="project-extension page-width">${extension.calendars ? calendarGallery(extension.calendars) : ''}${extension.post ? `<a class="extension-post" href="${esc(extension.post.url)}" target="_blank" rel="noopener noreferrer" aria-label="${esc(extension.title)} Instagram에서 보기"><img src="${esc(extension.post.src)}" alt="${esc(extension.post.alt)}" width="${extension.post.width}" height="${extension.post.height}" loading="lazy" decoding="async"><span>${esc(extension.post.label || '홍보 게시물 보기')} ↗</span></a>` : ''}<div class="extension-copy"><h3>${esc(extension.title)}</h3><p>${esc(extension.text)}</p></div></section>`;
+  return `<section class="project-extension page-width${extension.url ? ' project-extension-link' : ''}">${extension.calendars ? calendarGallery(extension.calendars) : ''}${extension.image ? `<img class="extension-image" src="${esc(extension.image.src)}" alt="${esc(extension.image.alt)}" loading="lazy" decoding="async">` : ''}${extension.post ? `<a class="extension-post" href="${esc(extension.post.url)}" target="_blank" rel="noopener noreferrer" aria-label="${esc(extension.title)} Instagram에서 보기"><img src="${esc(extension.post.src)}" alt="${esc(extension.post.alt)}" width="${extension.post.width}" height="${extension.post.height}" loading="lazy" decoding="async"><span>${esc(extension.post.label || '홍보 게시물 보기')} ↗</span></a>` : ''}<div class="extension-copy"><h3>${esc(extension.title)}</h3><p>${esc(extension.text)}</p>${extension.url ? `<a href="${esc(extension.url)}" target="_blank" rel="noopener noreferrer">사이트 보기 ↗</a>` : ''}</div></section>`;
 }
 
 function projectNotes(notes) {
@@ -81,7 +80,7 @@ function project(project) {
 }
 
 function smallWork() {
-  return `<section class="small-work page-width" id="experiments" aria-labelledby="small-work-title"><h2 id="small-work-title">작은 프로젝트</h2><div class="mini-project-list">${experiments.map(item => `<details class="mini-project"><summary>${sportsThumbnail()}<div class="mini-project-title"><p class="mini-project-category">${esc(item.category)}</p><h3>${item.url ? `<a class="mini-project-link" href="${esc(item.url)}" target="_blank" rel="noopener noreferrer">${esc(item.title)}<span aria-hidden="true">↗</span></a>` : esc(item.title)}</h3><p>${esc(item.description)}</p></div><span class="mini-project-toggle" aria-hidden="true"></span></summary><div class="mini-project-description"><p>${esc(item.details)}</p></div></details>`).join('')}</div></section>`;
+  return `<section class="small-work page-width" id="experiments" aria-labelledby="small-work-title"><h2 id="small-work-title">작은 프로젝트</h2><div class="mini-project-list">${experiments.map(item => `<details class="mini-project"><summary>${item.thumbnail ? `<img class="mini-project-thumbnail" src="${esc(item.thumbnail)}" alt="" loading="lazy" decoding="async">` : sportsThumbnail()}<div class="mini-project-title"><p class="mini-project-category">${esc(item.category)}</p><h3>${esc(item.title)}</h3><p>${esc(item.description)}</p></div><span class="mini-project-toggle" aria-hidden="true"></span></summary><div class="mini-project-description"><p>${esc(item.details)}</p>${links([{label: '사이트 보기', href: item.url}], item.title)}</div></details>`).join('')}</div></section>`;
 }
 
 function aboutSection() {
@@ -107,7 +106,7 @@ function footer() {
 }
 
 const unknownNotice = requestedProject && !selected ? '<p class="not-found page-width" role="status">요청한 프로젝트를 찾을 수 없어 전체 작업을 보여드립니다.</p>' : '';
-document.querySelector('#app').innerHTML = aboutPage ? `${header()}<main id="top">${aboutSection()}</main>${footer()}` : `${header()}<main>${single ? '<div class="single-back page-width" id="top"><a href="./#work">← 전체 작업</a></div>' : hero()}${unknownNotice}<div id="work" class="work">${displayedStories.map(project).join('')}</div>${single ? '' : smallWork() + aboutSection()}</main>${footer()}`;
+document.querySelector('#app').innerHTML = aboutPage ? `${header()}<main id="top">${aboutSection()}</main>${footer()}` : `${header()}<main>${single ? '<div class="single-back page-width" id="top"><a href="./#work">← 전체 작업</a></div>' : hero()}${unknownNotice}<div id="work" class="work">${single ? project(selected) : stories.map(project).join('')}</div>${single ? '' : smallWork() + aboutSection()}</main>${footer()}`;
 document.querySelector('.skip-link').href = aboutPage ? '#about' : single ? `#${selected.id}` : '#work';
 
 const activeSteps = new Map(stories.filter(item => item.chapters?.length).map(item => [item.id, 0]));

@@ -6,8 +6,8 @@ const screenshot = (file, alt, caption) => ({
 
 export const mementoProject = {
   id: 'project-a', title: '메멘토', theme: 'indigo', layout: 'story',
-  indexLabel: '배움 기록 앱 · 스토어 출시', category: 'Web · Android · iOS',
-  description: 'SNS에서 콘텐츠를 빠르게 소비하며 생각을 정리하지 못했던 경험에서 출발해 배움 기록·관점 공유 앱 ‘메멘토’를 기획하고 출시했습니다. 자기계발과 배움에 관심 있는 그룹에 앱을 소개했고, 교회 소모임과 대안교육기관에서 실제로 도입해 시행했습니다. 사업자등록과 결제 기능을 갖춰 현재는 월간 구독(메멘토 프로)을 운영하고 있습니다.',
+  indexLabel: '배움 기록 앱 기획·개발 · iOS·Android 출시', category: 'Web · Android · iOS',
+  description: '배움 기록 앱 메멘토를 기획·개발해 두 앱스토어에 출시했습니다. 처음 쓰는 사람들이 탭 구성을 어려워하는 모습을 보고, 이틀간 개발한 탐색 탭을 없애 기록에 집중하도록 첫 화면을 단순화했습니다. 교회 소모임과 대안교육기관에서 도입했고, 현재 월간 구독을 운영하고 있습니다.',
   metadata: [{ label: '기간', value: '2026.06 – 현재' }],
   links: [
     { label: '서비스', href: 'https://memento-app.kr/landing' },
@@ -22,13 +22,15 @@ export const mementoProject = {
     ],
     alt: '메멘토의 기록, 관점, 되새김 앱 화면',
     posters: [
+      { src: 'assets/memento/intro.png', alt: '오늘을 내일의 배움으로, 메멘토 앱 소개 이미지' },
+      { src: 'assets/memento/landing.png', alt: '메멘토 서비스 소개와 앱 설치 안내 화면', background: 'light' },
       { src: 'assets/memento/app-overview.jpg', alt: '메멘토 앱 소개, 배움 기록, 카드 넘기기, 관점 나누기' },
       { src: 'assets/memento/app-features.jpg', alt: '메멘토의 모임 기록, 콘텐츠 연결, 관점 요청, 지난 기록 되새김 기능' },
     ],
   },
   chapters: [
     {
-      id: 'development', label: '문제 발견·시장 검증', shortLabel: '문제·검증',
+      id: 'development', label: '문제 발견과 초기 사용자 설정', shortLabel: '초기 사용자',
       title: '소셜 미디어의 소비 문제를 발견하고,\n배움 기록 앱을 기획하다.',
       paragraphs: [
         '저는 책과 철학, 음악, 영화를 소개하는 계정을 즐겨 보았습니다. 하지만 원하는 콘텐츠를 찾으려 SNS를 열었다가 자극적인 영상에 빠져 시간을 보내곤 했습니다. 다큐멘터리 《소셜 딜레마》를 보며 앱의 설계가 콘텐츠 소비 방식에 미치는 영향에도 관심을 갖게 되었습니다. 다양한 콘텐츠를 접하고도 정작 원하는 것에 집중하지 못하고, 인상 깊었던 내용을 자기 생각으로 발전시키기 어려웠던 경험에서 문제를 발견했습니다. 콘텐츠를 빠르게 소비하고 지나치는 데 그치지 않고, 인상 깊었던 내용을 기록하며 스스로 생각을 정리하고 되새길 수 있는 공간을 만들고자 했습니다.',

@@ -120,6 +120,10 @@ img, video { width: 100%; height: 100%; object-fit: contain; }
 .milestones dt { color: var(--muted); }
 .inline-media { display: none; }
 .project-extension { display: grid; grid-template-columns: 1fr 1.3fr; gap: 10%; padding-top: 38px; margin-top: 38px; border-top: 1px solid var(--line); }
+.project-extension-link { align-items: start; }
+.extension-image { display: block; width: 100%; height: auto; }
+.project-extension-link h3 { margin-bottom: 14px; }
+.project-extension-link a { display: inline-block; margin-top: 16px; color: var(--indigo); font-size: 14px; text-decoration: underline; text-underline-offset: 4px; }
 .project-extension h3 { font-size: 23px; font-weight: 500; letter-spacing: -.045em; }
 .project-extension p { font-size: 15px; line-height: 1.95; max-width: 650px; color: var(--muted); }
 
@@ -127,6 +131,8 @@ img, video { width: 100%; height: 100%; object-fit: contain; }
 .small-work { padding-block: 60px 70px; border-top: 1px solid var(--line); display: grid; grid-template-columns: 1fr 2.8fr; gap: 6%; }
 .small-work > h2 { font-size: 17px; font-weight: 500; padding-top: 22px; }
 .mini-project { min-width: 0; }
+.mini-project + .mini-project { border-top: 1px solid var(--line); margin-top: 14px; padding-top: 14px; }
+.mini-project-thumbnail { display: block; width: 144px; height: 125px; object-fit: cover; }
 .mini-project > summary { display: grid; grid-template-columns: 144px minmax(0,1fr) 20px; gap: 28px; align-items: center; padding-block: 10px; cursor: pointer; list-style: none; }
 .mini-project > summary::-webkit-details-marker { display: none; }
 .mini-project-category { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
@@ -169,7 +175,7 @@ img, video { width: 100%; height: 100%; object-fit: contain; }
 
 .site-footer { background: var(--lavender); }
 .footer-inner { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 35px; padding-block: 46px; }
-.footer-identity > p:first-child { font: 29px/1.2 var(--serif); letter-spacing: -1px; color: var(--indigo); }
+.footer-identity > p:first-child { font: 500 29px/1.2 var(--sans); letter-spacing: -1px; color: var(--indigo); }
 .footer-links { margin-left: auto; display: flex; flex-wrap: wrap; gap: 8px 30px; min-width: 0; font-size: 13px; }
 .footer-links a { padding-block: 12px; }
 .footer-links a > span { margin-left: 9px; }
@@ -208,6 +214,7 @@ img, video { width: 100%; height: 100%; object-fit: contain; }
   .chapter-copy > p { font-size: 14px; }
   .story-chapter { padding-block: 45px 65px; }
   .small-work { grid-template-columns: 1fr 4fr; gap: 4%; }
+  .mini-project-thumbnail { width: 120px; }
   .mini-project > summary { gap: 22px; grid-template-columns: 120px minmax(0,1fr) 18px; }
   .mini-project-title h3 { font-size: 22px; }
   .mini-project-description { padding-left: 142px; }
@@ -232,7 +239,6 @@ img, video { width: 100%; height: 100%; object-fit: contain; }
   .site-header { padding-inline: 20px; gap: 16px; }
   .wordmark { font-size: 22px; }
   .site-header nav { gap: 17px; font-size: 11px; }
-  .site-header .small-work-link { display: none; }
   .about-inner { grid-template-columns: 1fr; gap: 30px; }
   .book-shelf { grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: 20px; }
   .hero-inner { display: block; min-height: 0; padding-block: 42px 70px; }
@@ -278,10 +284,12 @@ img, video { width: 100%; height: 100%; object-fit: contain; }
   .media-expand { font-size: 12px; gap: 8px; padding: 0 14px; min-width: 44px; min-height: 44px; right: 10px; bottom: 10px; }
   .media-expand svg { width: 16px; height: 16px; }
   .project-extension { display: block; padding-top: 26px; margin-top: 28px; }
+  .extension-image { margin-bottom: 20px; }
   .project-extension h3 { font-size: 19px; margin-bottom: 15px; }
   .project-extension p { font-size: 14px; }
   .small-work { display: block; padding-block: 35px 45px; }
   .small-work > h2 { padding: 0; margin-bottom: 25px; font-size: 15px; }
+  .mini-project-thumbnail { width: 80px; height: 108px; }
   .mini-project > summary { grid-template-columns: 80px minmax(0,1fr) 14px; gap: 15px; align-items: start; }
   .mini-project-category { font-size: 10px; line-height: 1.6; margin-bottom: 6px; }
   .mini-project-title h3 { font-size: 17px; line-height: 1.5; margin-bottom: 7px; }
@@ -370,7 +378,6 @@ body:has(.pixel-home) .site-header nav { gap: clamp(9px,2.8vw,33px); }
  .pixel-work small { font-size: 12px; }
  body:has(.pixel-home) .site-header a { font-size: 13px; }
  body:has(.pixel-home) .site-header nav { gap: 14px; }
- body:has(.pixel-home) .site-header .small-work-link { display: none; }
 }
 
 /* Hero intro: the title pixels assemble, then the rest arrives in rhythm */
