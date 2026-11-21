@@ -349,11 +349,12 @@ body:has(.pixel-home) .site-header nav { gap: clamp(9px,2.8vw,33px); }
 .pixel-work-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
 .pixel-work h2 { font: 500 13px/1.4 var(--sans); }
 .pixel-work nav { display: grid; grid-template-columns: 1fr; gap: 6px; }
-.pixel-work a { position: relative; display: grid; align-content: center; gap: 7px; padding: 16px 38px 16px 20px; min-height: 88px; background: #fae0f0ed; border: 1px solid #65459086; transition: background-color .2s,color .2s; }
+.pixel-work a { position: relative; display: grid; align-content: center; gap: 7px; padding: 16px 38px 16px 20px; min-height: 88px; background: #fae0f0a6; border: 1px solid #65459086; box-shadow: inset 2px 2px #fff2fb88, inset -2px -2px #67459626; transition: background-color .2s,color .2s; }
 .pixel-work strong { font-size: clamp(21px,2.45vw,38px); letter-spacing: -.055em; line-height: 1.12; }
 .pixel-work small { font-size: 13px; word-break: keep-all; }
 .pixel-work a > span { position: absolute; right: 15px; top: 16px; }
-.pixel-work a:is(:hover,:focus-visible) { color: #fff2fb; background: #48309f; }
+.pixel-work a:is(:hover,:focus-visible) { color: #fff2fb; background: #48309fe8; }
+.pixel-work a:focus-visible { outline: 2px solid currentColor; outline-offset: -5px; }
 @media(max-width:650px) {
  .pixel-layout { grid-template-columns: minmax(0,1fr); align-content: center; gap: 38px; }
  .pixel-home h1 { width: fit-content; font-size: clamp(66px,22vw,128px); }
